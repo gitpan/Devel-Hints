@@ -1,8 +1,8 @@
 # $File: //member/autrijus/Devel-Hints/Makefile.PL $ $Author: autrijus $
-# $Revision: #2 $ $Change: 4083 $ $DateTime: 2003/02/05 01:26:01 $
+# $Revision: #4 $ $Change: 6920 $ $DateTime: 2003/07/10 17:20:26 $
 
 use 5.006;
-use ExtUtils::MakeMaker;
+use inc::Module::Install;
 
 WriteMakefile(
     AUTHOR		=> 'Autrijus Tang (autrijus@autrijus.org)',
@@ -13,5 +13,9 @@ WriteMakefile(
 	'Test::More'	=> 0,
     }
 );
+
+par_base('AUTRIJUS');
+fetch_par() unless can_cc();
+auto_install();
 
 1;

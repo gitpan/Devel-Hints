@@ -1,10 +1,10 @@
 # $File: //member/autrijus/Devel-Hints/Hints.pm $ $Author: autrijus $
-# $Revision: #3 $ $Change: 4083 $ $DateTime: 2003/02/05 01:26:01 $
+# $Revision: #4 $ $Change: 6920 $ $DateTime: 2003/07/10 17:20:26 $
 
 use 5.006;
 package Devel::Hints;
 
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
@@ -37,8 +37,8 @@ Devel::Hints - Access compile-time hints at runtime
 
 =head1 VERSION
 
-This document describes version 0.03 of Devel::Hints, released
-February 5, 2003.
+This document describes version 0.04 of Devel::Hints, released
+July 8, 2003.
 
 =head1 SYNOPSIS
 
@@ -46,6 +46,7 @@ February 5, 2003.
 
     LABEL:
     print cop_label();	    # 'LABEL'
+    cop_label(0 => 'FOO');  # "goto FOO;" is valid after this point!
     print cop_file();	    # same as __FILE__
     print cop_filegv();	    # same as \$::{'_<' . __FILE__}
     print cop_stashpv();    # same as __PACKAGE__
@@ -74,7 +75,9 @@ its block is compiled under.
 
 No functions are exported by default.  Each function may take an
 optional positive integer as argument, indicating how many blocks
-it should walk upward to obtain the C<cop> members.
+it should walk upward to obtain the C<cop> members.  Most functions
+also takes another optional argument, which (if specified) I<becomes
+the new value> for the hint.
 
 =head1 FUNCTIONS
 
@@ -90,7 +93,7 @@ File name for the current line.
 
 =item cop_filegv
 
-Reference to the filehandle glob.
+Reference to the filehandle glob.  Read only.
 
 =item cop_stashpv
 
@@ -98,7 +101,7 @@ The current package name.
 
 =item cop_stash
 
-Reference to the current symbol table.
+Reference to the current symbol table.  Read only.
 
 =item cop_seq
 

@@ -1,0 +1,11 @@
+name: Devel::Hints
+version: 0.04
+abstract: Access compile-time hints at runtime
+author: Autrijus Tang (autrijus@autrijus.org)
+distribution_type: module
+requires:
+  Test::More: 0
+private:
+  directory:
+    - inc
+generated_by: Module::Install version 0.21
