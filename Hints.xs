@@ -1,39 +1,48 @@
 /* $File: //member/autrijus/Devel-Hints/Hints.xs $ $Author: autrijus $
-   $Revision: #1 $ $Change: 4022 $ $DateTime: 2003/01/29 18:56:37 $ */
+   $Revision: #2 $ $Change: 4025 $ $DateTime: 2003/01/29 20:16:46 $ */
 
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 
+#define MYCOP ((count <= 0) ? PL_curcop \
+			    : cxstack[cxstack_ix - count + 1 ].blk_oldcop)
+
 MODULE = Devel::Hints	PACKAGE = Devel::Hints
 
 SV *
-cop_label()
+cop_label(count=0)
+	I32		count
     PPCODE:
-	PUSHs(newSVpv(PL_curcop->cop_label, 0));
+	PUSHs(newSVpv(MYCOP->cop_label, 0));
 
 SV *
-cop_seq()
+cop_seq(count=0)
+	I32		count
     PPCODE:
-	PUSHs(newSVuv(PL_curcop->cop_seq));
+	PUSHs(newSVuv(MYCOP->cop_seq));
 
 SV *
-cop_arybase()
+cop_arybase(count=0)
+	I32		count
     PPCODE:
-	PUSHs(newSViv(PL_curcop->cop_arybase));
+	PUSHs(newSViv(MYCOP->cop_arybase));
 
 SV *
-cop_line()
+cop_line(count=0)
+	I32		count
     PPCODE:
-	PUSHs(newSVuv((UV)PL_curcop->cop_line));
+	PUSHs(newSVuv((UV)MYCOP->cop_line));
 
 SV *
-cop_warnings()
+cop_warnings(count=0)
+	I32		count
     PPCODE:
-	PUSHs(newSVuv((UV)PL_curcop->cop_warnings));
+	PUSHs(newSVuv((UV)MYCOP->cop_warnings));
 
 SV *
-cop_io()
+cop_io(count=0)
+	I32		count
     PPCODE:
-	PUSHs(PL_curcop->cop_io);
+	PUSHs( MYCOP->cop_io );
 

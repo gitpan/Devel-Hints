@@ -1,10 +1,10 @@
 # $File: //member/autrijus/Devel-Hints/Hints.pm $ $Author: autrijus $
-# $Revision: #1 $ $Change: 4022 $ $DateTime: 2003/01/29 18:56:37 $
+# $Revision: #2 $ $Change: 4025 $ $DateTime: 2003/01/29 20:16:46 $
 
 use 5.008;
 package Devel::Hints;
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -28,7 +28,7 @@ Devel::Hints - Access compile-time hints at runtime
 
 =head1 VERSION
 
-This document describes version 0.01 of Devel::Hints, released
+This document describes version 0.02 of Devel::Hints, released
 January 30, 2003.
 
 =head1 SYNOPSIS
@@ -52,13 +52,50 @@ January 30, 2003.
     use open IO => ':utf8';
     print cop_io();	    # same as compile-time ${^OPEN}
 
+    {
+	use IO => ':raw';
+	print cop_io(1);    # access one uplevel; still ":utf8\0:utf8"
+    }
+
 =head1 DESCRIPTION
 
 This module exports the C<cop> struct as individual functions;
 callers can call them to find out the lexical-scoped hints that
 its block is compiled under.
 
-No functions are exported by default.
+No functions are exported by default.  Each function may take an
+optional positive integer as argument, indicating how many blocks
+it should walk upward to obtain the C<cop> members.
+
+=head1 FUNCTIONS
+
+=over 4
+
+=item cop_label
+
+Label for the current construct.
+
+=item cop_seq
+
+Parse sequencial number.
+
+=item cop_arybase
+
+Array base the calling line was compiled with.
+
+=item cop_line
+
+Line # of the calling command.
+
+=item cop_warnings
+
+Lexical warnings bitmask, a.k.a. C<${^WARNING_BITS}>.
+
+=item cop_io
+
+Lexical IO defaults, a.k.a. C<${^OPEN}>.
+
+=back
 
 =head1 CAVEATS
 

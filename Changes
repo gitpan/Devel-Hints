@@ -1,4 +1,12 @@
 ____________________________________________________________________________
+[  4025] By: autrijus                              on 2003/01/29  20:16:46
+        Log: * 0.02, with the ability to specify uplevels.
+	   ! Hints.pm Hints.xs t/1-basic.t
+____________________________________________________________________________
+[  4024] By: autrijus                              on 2003/01/29  18:57:42
+        Log: * changes and signatures.
+	   + Changes SIGNATURE
+____________________________________________________________________________
 [  4023] By: autrijus                              on 2003/01/29  18:56:59
         Log: * manifest.
 	   + MANIFEST MANIFEST.SKIP
