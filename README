@@ -1,8 +1,8 @@
 # $File: //member/autrijus/Devel-Hints/README $ $Author: autrijus $
-# $Revision: #1 $ $Change: 4022 $ $DateTime: 2003/01/29 18:56:37 $
+# $Revision: #2 $ $Change: 7156 $ $DateTime: 2003/07/27 08:55:12 $
 
 This is the README file for Devel::Hints, a module providing functions
-to access compile-time hints at runtime.
+to access and manipulate compile-time hints at runtime.
 
 * Installation
 

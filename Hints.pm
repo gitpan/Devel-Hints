@@ -1,10 +1,10 @@
 # $File: //member/autrijus/Devel-Hints/Hints.pm $ $Author: autrijus $
-# $Revision: #4 $ $Change: 6920 $ $DateTime: 2003/07/10 17:20:26 $
+# $Revision: #5 $ $Change: 7156 $ $DateTime: 2003/07/27 08:55:12 $
 
 use 5.006;
 package Devel::Hints;
 
-$VERSION = '0.04';
+$VERSION = '0.10';
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
@@ -22,7 +22,8 @@ require DynaLoader;
     cop_arybase
     cop_line
     cop_warnings
-    ), ( $] >= 5.007 ? ( 'cop_io' ) : () )
+    cop_io
+    ),
 );
 
 __PACKAGE__->bootstrap($VERSION);
@@ -37,8 +38,8 @@ Devel::Hints - Access compile-time hints at runtime
 
 =head1 VERSION
 
-This document describes version 0.04 of Devel::Hints, released
-July 8, 2003.
+This document describes version 0.10 of Devel::Hints, released
+July 26, 2003.
 
 =head1 SYNOPSIS
 
@@ -69,15 +70,17 @@ July 8, 2003.
 
 =head1 DESCRIPTION
 
-This module exports the C<cop> struct as individual functions;
-callers can call them to find out the lexical-scoped hints that
-its block is compiled under.
+This module exports the C<cop> (code operator) struct as individual
+functions; callers can call them to find out the lexical-scoped hints
+that its block (or statement) is compiled under.
 
 No functions are exported by default.  Each function may take an
 optional positive integer as argument, indicating how many blocks
-it should walk upward to obtain the C<cop> members.  Most functions
-also takes another optional argument, which (if specified) I<becomes
-the new value> for the hint.
+it should walk upward to obtain the C<cop> members.
+
+Functions can also take another optional argument, which (if specified)
+I<becomes the new value> for the hint, affecting the current statement
+or block's behaviour.
 
 =head1 FUNCTIONS
 
@@ -89,11 +92,11 @@ Label for the current construct.
 
 =item cop_file
 
-File name for the current line.
+File name for the current source file.
 
 =item cop_filegv
 
-Reference to the filehandle glob.  Read only.
+Glob reference to the current source filehandle.
 
 =item cop_stashpv
 
@@ -101,7 +104,7 @@ The current package name.
 
 =item cop_stash
 
-Reference to the current symbol table.  Read only.
+Hash reference to the current symbol table.
 
 =item cop_seq
 
@@ -117,11 +120,14 @@ The line number.
 
 =item cop_warnings
 
-Lexical warnings bitmask, a.k.a. C<${^WARNING_BITS}>.
+Lexical warnings bitmask, a.k.a. C<${^WARNING_BITS}>.  If no lexical
+warnings are in effect, returns the global warning flags as an integer.
 
 =item cop_io
 
-Lexical IO defaults, a.k.a. C<${^OPEN}>.
+Lexical IO defaults, a.k.a. C<${^OPEN}>.  If no lexical IO layers
+are in effect, an empty string is returned.  Always returns C<undef>
+under pre-5.7 versions of Perl.
 
 =back
 

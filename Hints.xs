@@ -1,95 +1,125 @@
 /* $File: //member/autrijus/Devel-Hints/Hints.xs $ $Author: autrijus $
-   $Revision: #4 $ $Change: 6920 $ $DateTime: 2003/07/10 17:20:26 $ */
+   $Revision: #5 $ $Change: 7154 $ $DateTime: 2003/07/27 08:52:51 $ */
 
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
 
-#define MYCOP ((count <= 0) ? PL_curcop \
+#define SET(x)		if (items >= 2) x
+#define GET(x)		if (GIMME_V == G_VOID) XSRETURN(0); RETVAL = x
+#define MEMBER(m)	SET( MYCOP->m = value ); \
+			GET( MYCOP->m );
+#define MEMBER_PV(m)	SET( MYCOP->m = savepv(value) ); \
+			GET( MYCOP->m ? MYCOP->m : Nullch );
+#define MEMBER_SV(m)	SET( MYCOP->m = newSVsv(value)); \
+			GET( MYCOP->m ? SvREFCNT_inc(MYCOP->m) : newSVpvn("", 0) );
+#define ACCESSOR(s,g)	SET( s(MYCOP, value) ); \
+			GET( g(MYCOP) );
+#define MYCOP		((count <= 0) ? PL_curcop \
 			    : cxstack[cxstack_ix - count + 1 ].blk_oldcop)
 
 MODULE = Devel::Hints	PACKAGE = Devel::Hints
 
-SV *
+char *
 cop_label(count=0, value=NULL)
 	I32		count
 	char*		value
-    PPCODE:
-	if (value) MYCOP->cop_label = value;
-	PUSHs(newSVpv(MYCOP->cop_label, 0));
+    CODE:
+	MEMBER_PV( cop_label );
+    OUTPUT:
+	RETVAL
 
-SV *
-cop_stashpv(count=0,value=NULL)
+char *
+cop_stashpv(count=0, value=NULL)
 	I32		count
 	char*		value
-    PPCODE:
-	if (value) CopSTASHPV_set(MYCOP, value);
-	PUSHs(newSVpv(CopSTASHPV(MYCOP), 0));
+    CODE:
+	ACCESSOR( CopSTASHPV_set, CopSTASHPV );
+    OUTPUT:
+	RETVAL
 
-SV *
-cop_stash(count=0)
+HV *
+cop_stash(count=0, value=NULL)
 	I32		count
-    PPCODE:
-	PUSHs(newRV((SV *)CopSTASH(MYCOP)));
+	HV*		value
+    CODE:
+	ACCESSOR( CopSTASH_set, CopSTASH );
+    OUTPUT:
+	RETVAL
 
-SV *
-cop_file(count=0,value=NULL)
+char *
+cop_file(count=0, value=NULL)
 	I32		count
 	char*		value
-    PPCODE:
-#ifdef ITHREADS
-	if (value) CopFILE_set(MYCOP, value);
-#else
-	if (value) sv_setpv( CopFILESV(MYCOP), value);
-#endif
-	PUSHs(newSVpv(CopFILE(MYCOP), 0));
+    CODE:
+	ACCESSOR( CopFILE_set, CopFILE );
+    OUTPUT:
+	RETVAL
 
-SV *
-cop_filegv(count=0)
+GV *
+cop_filegv(count=0, value=NULL)
 	I32		count
-    PPCODE:
-	PUSHs(newRV((SV *)CopFILEGV(MYCOP)));
+	GV*		value
+    CODE:
+	ACCESSOR( CopFILEGV_set, CopFILEGV );
+    OUTPUT:
+	RETVAL
 
-SV *
+UV
 cop_seq(count=0, value=NULL)
 	I32		count
 	UV		value
-    PPCODE:
-	if (value) sv_setuv(MYCOP->cop_warnings, value);
-	PUSHs(newSVuv(MYCOP->cop_seq));
+    CODE:
+	MEMBER( cop_seq );
+    OUTPUT:
+	RETVAL
 
-SV *
+I32
 cop_arybase(count=0, value=NULL)
 	I32		count
 	I32		value
-    PPCODE:
-	if (value) MYCOP->cop_arybase = value;
-	PUSHs(newSViv(MYCOP->cop_arybase));
+    CODE:
+	MEMBER( cop_arybase );
+    OUTPUT:
+	RETVAL
 
-SV *
+U16
 cop_line(count=0, value=NULL)
 	I32		count
 	U16		value
-    PPCODE:
-	if (value) MYCOP->cop_line = value;
-	PUSHs(newSVuv((UV)MYCOP->cop_line));
+    CODE:
+	MEMBER( cop_line );
+    OUTPUT:
+	RETVAL
 
 SV *
 cop_warnings(count=0, value=NULL)
 	I32		count
-	UV		value
-    PPCODE:
-	if (value) sv_setuv(MYCOP->cop_warnings, value);
-	PUSHs(newSVuv((UV)MYCOP->cop_warnings));
+	SV*		value
+    CODE:
+	SET( MYCOP->cop_warnings = newSVsv(value));
+	if ( PTR2UV(MYCOP->cop_warnings) > 255 ) {
+	    /* pointer to the lexical SV */
+	    RETVAL = SvREFCNT_inc(MYCOP->cop_warnings);
+	}
+	else {
+	    /* UV of global warnings flags */
+	    RETVAL = newSVuv( PTR2UV(MYCOP->cop_warnings) );
+	}
+    OUTPUT:
+	RETVAL
 
-#if PERL_REVISION == 5 && PERL_VERSION >= 7
 SV *
 cop_io(count=0, value=NULL)
 	I32		count
 	SV*		value
-    PPCODE:
-	if (value) MYCOP->cop_io = newSVsv(value);
-	PUSHs( MYCOP->cop_io );
-
+    CODE:
+#if PERL_REVISION == 5 && PERL_VERSION >= 7
+	MEMBER_SV( cop_io );
+#else
+	RETVAL = &PL_sv_undef;
 #endif
+    OUTPUT:
+	RETVAL
+

@@ -1,9 +1,9 @@
 # $File: //member/autrijus/Devel-Hints/t/1-basic.t $ $Author: autrijus $
-# $Revision: #3 $ $Change: 4083 $ $DateTime: 2003/02/05 01:26:01 $
+# $Revision: #4 $ $Change: 7155 $ $DateTime: 2003/07/27 08:53:27 $
 
 use strict;
 use Config;
-use Test::More tests => 16;
+use Test::More tests => 18;
 
 use_ok('Devel::Hints');
 Devel::Hints->import(':all');
@@ -34,16 +34,24 @@ is(cop_arybase(), 10, 'cop_arybase');
 is(cop_line(), __LINE__, 'cop_line');
 
 use warnings;
-is(cop_warnings(), 12, 'cop_warnings');
+is(cop_warnings(0), 12, 'cop_warnings');
 
 {
-    no warnings;
+    no warnings 'once';
+    my $x;
+    BEGIN { $x = ${^WARNING_BITS} };
+    is(cop_warnings(0), $x, 'cop_warnings - lexical');
     is(cop_warnings(1), 12, 'cop_warnings(1)');
 }
 
-SKIP: {
-    skip('cop_io() not available', 5) unless $] >= 5.007;
 
+SKIP: {
+    skip('cop_io() not available', 6) unless defined cop_io();
+
+    no open;
+    is(cop_io(0), "", 'cop_io - empty string when not set');
+
+    {
 use open IN => ':raw', OUT => ':raw';
 is(cop_io(0), ":raw\0:raw", 'cop_io');
 
@@ -66,6 +74,7 @@ is(show_io(), ":crlf\0:crlf", 'cop_io(1) on sub');
 use open IN => ':crlf', OUT => ':crlf';
 is(show_io_2(), ":crlf\0:crlf", 'cop_io(2) on block');
 }
+    }
 
 }
 

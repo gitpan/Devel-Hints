@@ -1,4 +1,28 @@
 ____________________________________________________________________________
+[  7156] By: autrijus                              on 2003/07/27  08:55:12
+        Log: * Thie be 0.10.
+	   ! Hints.pm README
+____________________________________________________________________________
+[  7155] By: autrijus                              on 2003/07/27  08:53:27
+        Log: * read/write tests.
+	   + t/2-write.t
+	   ! t/1-basic.t
+____________________________________________________________________________
+[  7154] By: autrijus                              on 2003/07/27  08:52:51
+        Log: * cop_stash can now be assigned \%hash.
+             * cop_filegv can now be assigned \*glob.
+             * cop_warnings now correctly returns either a 12-byte
+             string under lexical warnings, or a positive integer
+             otherwise.
+             * cop_io now returns an empty string when there's no
+             value available, and undef for perls without perlio
+	   + typemap
+	   ! Hints.xs
+____________________________________________________________________________
+[  6922] By: autrijus                              on 2003/07/10  17:26:17
+        Log: * changes and signatures.
+	   ! Changes MANIFEST SIGNATURE
+____________________________________________________________________________
 [  6920] By: autrijus                              on 2003/07/10  17:20:26
         Log: * Devel::Hints 0.04, now with writable hints!
 	   ! Hints.pm Hints.xs Makefile.PL
