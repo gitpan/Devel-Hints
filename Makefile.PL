@@ -1,7 +1,7 @@
 # $File: //member/autrijus/Devel-Hints/Makefile.PL $ $Author: autrijus $
-# $Revision: #1 $ $Change: 4022 $ $DateTime: 2003/01/29 18:56:37 $
+# $Revision: #2 $ $Change: 4083 $ $DateTime: 2003/02/05 01:26:01 $
 
-use 5.008;
+use 5.006;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
@@ -9,6 +9,9 @@ WriteMakefile(
     ABSTRACT		=> 'Access compile-time hints at runtime',
     NAME		=> 'Devel::Hints',
     VERSION_FROM	=> 'Hints.pm',
+    PREREQ_PM		=> {
+	'Test::More'	=> 0,
+    }
 );
 
 1;

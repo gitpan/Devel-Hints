@@ -1,20 +1,29 @@
 # $File: //member/autrijus/Devel-Hints/Hints.pm $ $Author: autrijus $
-# $Revision: #2 $ $Change: 4025 $ $DateTime: 2003/01/29 20:16:46 $
+# $Revision: #3 $ $Change: 4083 $ $DateTime: 2003/02/05 01:26:01 $
 
-use 5.008;
+use 5.006;
 package Devel::Hints;
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use strict;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 
 require Exporter;
 require DynaLoader;
 
-@ISA = qw(Exporter DynaLoader);
-@EXPORT_OK = qw( cop_label cop_seq cop_arybase cop_line cop_warnings cop_io );
-%EXPORT_TAGS = ( all => \@EXPORT_OK );
+@ISA		= qw( Exporter DynaLoader );
+%EXPORT_TAGS	= ( all => \@EXPORT_OK );
+@EXPORT_OK	= ( qw(
+    cop_label
+    cop_stash	cop_stashpv
+    cop_file	cop_filegv
+    cop_seq
+    cop_arybase
+    cop_line
+    cop_warnings
+    ), ( $] >= 5.007 ? ( 'cop_io' ) : () )
+);
 
 __PACKAGE__->bootstrap($VERSION);
 
@@ -28,8 +37,8 @@ Devel::Hints - Access compile-time hints at runtime
 
 =head1 VERSION
 
-This document describes version 0.02 of Devel::Hints, released
-January 30, 2003.
+This document describes version 0.03 of Devel::Hints, released
+February 5, 2003.
 
 =head1 SYNOPSIS
 
@@ -37,18 +46,18 @@ January 30, 2003.
 
     LABEL:
     print cop_label();	    # 'LABEL'
-
-    print cop_seq();	    # some integer
-
-    $[ = 10;
-    print cop_arybase();    # 10
-
-    #line 100
-    print cop_line();	    # 100
+    print cop_file();	    # same as __FILE__
+    print cop_filegv();	    # same as \$::{'_<' . __FILE__}
+    print cop_stashpv();    # same as __PACKAGE__
+    print cop_stash();	    # same as \%{__PACKAGE__ . '::'}
+    print cop_seq();	    # an integer
+    print cop_arybase();    # same as $[
+    print cop_line();	    # same as __LINE__
 
     use warnings;
     print cop_warnings();   # same as compile-time ${^WARNING_BITS}
 
+    # cop_io() is only available to Perl 5.7 or above
     use open IO => ':utf8';
     print cop_io();	    # same as compile-time ${^OPEN}
 
@@ -75,6 +84,22 @@ it should walk upward to obtain the C<cop> members.
 
 Label for the current construct.
 
+=item cop_file
+
+File name for the current line.
+
+=item cop_filegv
+
+Reference to the filehandle glob.
+
+=item cop_stashpv
+
+The current package name.
+
+=item cop_stash
+
+Reference to the current symbol table.
+
 =item cop_seq
 
 Parse sequencial number.
@@ -85,7 +110,7 @@ Array base the calling line was compiled with.
 
 =item cop_line
 
-Line # of the calling command.
+The line number.
 
 =item cop_warnings
 
@@ -97,15 +122,10 @@ Lexical IO defaults, a.k.a. C<${^OPEN}>.
 
 =back
 
-=head1 CAVEATS
-
-The two other members (C<cop_stashpv> and C<cop_file> under ithreads,
-C<cop_stash> and C<cop_filegv> otherwise) are not exported.
-
 =head1 ACKNOWLEDGMENTS
 
 Thanks to Rafael Garcia-Suarez for demonstrating how to do this with
-the elegant B<Inline.pm>-based code on p5p, which I adapted to this
+the elegant B<Inline::C> code on p5p, which I adapted to this
 less elegant XS implementation.
 
 =head1 AUTHORS

@@ -6,5 +6,6 @@ MANIFEST.SKIP
 Makefile.PL
 README
 SIGNATURE
+ppport.h
 t/0-signature.t
 t/1-basic.t

@@ -1,4 +1,14 @@
 ____________________________________________________________________________
+[  4083] By: autrijus                              on 2003/02/05  01:26:01
+        Log: * Devel::Hints 0.03, now with perl 5.6 and file/stash
+	       support.
+	   ! Hints.pm Hints.xs MANIFEST Makefile.PL
+	   ! t/1-basic.t
+____________________________________________________________________________
+[  4026] By: autrijus                              on 2003/01/29  20:17:48
+        Log: * changes and signatures.
+	   ! Changes SIGNATURE
+____________________________________________________________________________
 [  4025] By: autrijus                              on 2003/01/29  20:16:46
         Log: * 0.02, with the ability to specify uplevels.
 	   ! Hints.pm Hints.xs t/1-basic.t
