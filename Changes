@@ -1,0 +1,9 @@
+____________________________________________________________________________
+[  4023] By: autrijus                              on 2003/01/29  18:56:59
+        Log: * manifest.
+	   + MANIFEST MANIFEST.SKIP
+____________________________________________________________________________
+[  4022] By: autrijus                              on 2003/01/29  18:56:37
+        Log: * Devel::Hints 0.01.
+	   + Hints.pm Hints.xs Makefile.PL README
+	   + t/0-signature.t t/1-basic.t
