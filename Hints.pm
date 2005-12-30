@@ -1,13 +1,9 @@
-# $File: //member/autrijus/Devel-Hints/Hints.pm $ $Author: autrijus $
-# $Revision: #5 $ $Change: 7156 $ $DateTime: 2003/07/27 08:55:12 $
-
-use 5.006;
 package Devel::Hints;
-
-$VERSION = '0.10';
+$VERSION = '0.11';
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
+use 5.006;
 
 require Exporter;
 require DynaLoader;
@@ -38,8 +34,8 @@ Devel::Hints - Access compile-time hints at runtime
 
 =head1 VERSION
 
-This document describes version 0.10 of Devel::Hints, released
-July 26, 2003.
+This document describes version 0.11 of Devel::Hints, released
+December 30, 2005.
 
 =head1 SYNOPSIS
 
@@ -139,11 +135,11 @@ less elegant XS implementation.
 
 =head1 AUTHORS
 
-Autrijus Tang E<lt>autrijus@autrijus.orgE<gt>
+Audrey Tang E<lt>autrijus@autrijus.orgE<gt>
 
 =head1 COPYRIGHT
 
-Copyright 2003 by Autrijus Tang E<lt>autrijus@autrijus.orgE<gt>.
+Copyright 2003, 2005 by Audrey Tang E<lt>autrijus@autrijus.orgE<gt>.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

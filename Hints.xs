@@ -67,7 +67,7 @@ cop_filegv(count=0, value=NULL)
 	RETVAL
 
 UV
-cop_seq(count=0, value=NULL)
+cop_seq(count=0, value=0)
 	I32		count
 	UV		value
     CODE:
@@ -76,7 +76,7 @@ cop_seq(count=0, value=NULL)
 	RETVAL
 
 I32
-cop_arybase(count=0, value=NULL)
+cop_arybase(count=0, value=0)
 	I32		count
 	I32		value
     CODE:
@@ -85,7 +85,7 @@ cop_arybase(count=0, value=NULL)
 	RETVAL
 
 U16
-cop_line(count=0, value=NULL)
+cop_line(count=0, value=0)
 	I32		count
 	U16		value
     CODE:

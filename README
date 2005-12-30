@@ -1,6 +1,3 @@
-# $File: //member/autrijus/Devel-Hints/README $ $Author: autrijus $
-# $Revision: #2 $ $Change: 7156 $ $DateTime: 2003/07/27 08:55:12 $
-
 This is the README file for Devel::Hints, a module providing functions
 to access and manipulate compile-time hints at runtime.
 
@@ -8,15 +5,15 @@ to access and manipulate compile-time hints at runtime.
 
 Devel::Hints uses the standard perl module install process:
 
-cpansign -v		# see SIGNATURE for details
-perl Makefile.PL
-make
-make test
-make install
+    cpansign -v         # optional; see SIGNATURE for details
+    perl Makefile.PL
+    make                # or 'nmake' on Win32
+    make test
+    make install
 
 * Copyright
 
-Copyright 2003 by Autrijus Tang <autrijus@autrijus.org>.
+Copyright 2003, 2005 by Audrey Tang <autrijus@autrijus.org>.
 
 All rights reserved.  You can redistribute and/or modify
 this bundle under the same terms as Perl itself.

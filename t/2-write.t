@@ -1,11 +1,6 @@
-# $File: //member/autrijus/Devel-Hints/t/2-write.t $ $Author: autrijus $
-# $Revision: #1 $ $Change: 7155 $ $DateTime: 2003/07/27 08:53:27 $
-
 use strict;
 use Test::More tests => 19;
-
-use_ok('Devel::Hints');
-Devel::Hints->import(':all');
+use ok 'Devel::Hints', ':all';
 
 my ($Topic, $TopicRV);
 foreach (qw(label file filegv stashpv stash seq arybase line warnings io)) {

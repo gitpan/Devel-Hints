@@ -1,12 +1,7 @@
-# $File: //member/autrijus/Devel-Hints/t/1-basic.t $ $Author: autrijus $
-# $Revision: #4 $ $Change: 7155 $ $DateTime: 2003/07/27 08:53:27 $
-
 use strict;
 use Config;
 use Test::More tests => 18;
-
-use_ok('Devel::Hints');
-Devel::Hints->import(':all');
+use ok 'Devel::Hints', ':all';
 
 LABEL:
 is(cop_label(), 'LABEL', 'cop_label');

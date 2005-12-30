@@ -1,19 +1,30 @@
-#line 1 "inc/Module/Install/Can.pm - /usr/local/lib/perl5/site_perl/5.8.0/Module/Install/Can.pm"
-# $File: //depot/cpan/Module-Install/lib/Module/Install/Can.pm $ $Author: ingy $
-# $Revision: #5 $ $Change: 1377 $ $DateTime: 2003/03/20 15:11:54 $ vim: expandtab shiftwidth=4
-
+#line 1 "inc/Module/Install/Can.pm - /usr/local/lib/perl5/site_perl/5.8.7/Module/Install/Can.pm"
 package Module::Install::Can;
 use Module::Install::Base; @ISA = qw(Module::Install::Base);
 $VERSION = '0.01';
+
 use strict;
+use Config ();
+use File::Spec ();
+use ExtUtils::MakeMaker ();
+
+# check if we can load some module
+sub can_use {
+    my ($self, $mod, $ver) = @_;
+    $mod =~ s{::|\\}{/}g;
+    $mod .= ".pm" unless $mod =~ /\.pm$/i;
+
+    my $pkg = $mod;
+    $pkg =~ s{/}{::}g;
+    $pkg =~ s{\.pm$}{}i;
+
+    local $@;
+    eval { require $mod; $pkg->VERSION($ver || 0); 1 };
+}
 
 # check if we can run some command
 sub can_run {
     my ($self, $cmd) = @_;
-
-    require Config;
-    require File::Spec;
-    require ExtUtils::MakeMaker;
 
     my $_cmd = $cmd;
     return $_cmd if (-x $_cmd or $_cmd = MM->maybe_command($_cmd));
@@ -28,9 +39,30 @@ sub can_run {
 
 sub can_cc {
     my $self = shift;
-    require Config;
-    my $cc = $Config::Config{cc} or return;
-    $self->can_run($cc);
+    my @chunks = split(/ /, $Config::Config{cc}) or return;
+
+    # $Config{cc} may contain args; try to find out the program part
+    while (@chunks) {
+        return $self->can_run("@chunks") || (pop(@chunks), next);
+    }
+
+    return;
+}
+
+# Fix Cygwin bug on maybe_command();
+if ($^O eq 'cygwin') {
+    require ExtUtils::MM_Cygwin;
+    if (!defined(&ExtUtils::MM_Cygwin::maybe_command)) {
+        *ExtUtils::MM_Cygwin::maybe_command = sub {
+            my ($self, $file) = @_;
+            if ($file =~ m{^/cygdrive/}i) {
+                ExtUtils::MM_Win32->maybe_command($file);
+            }
+            else {
+                $self->SUPER::maybe_command($file);
+            }
+        }
+    }
 }
 
 1;

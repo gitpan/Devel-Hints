@@ -1,12 +1,16 @@
-name: Devel-Hints
-module_name: Devel::Hints
-version: 0.10
 abstract: Access compile-time hints at runtime
-author: Autrijus Tang (autrijus@autrijus.org)
-distribution_type: module
-requires:
+author: Audrey Tang <autrijus@autrijus.org>
+build_requires:
   Test::More: 0
-private:
+  ok: 0
+distribution_type: module
+generated_by: Module::Install version 0.50
+license: perl
+name: Devel-Hints
+no_index:
   directory:
     - inc
-generated_by: Module::Install version 0.22
+    - t
+requires:
+  perl: 5.6.0
+version: 0.11
