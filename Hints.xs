@@ -1,6 +1,3 @@
-/* $File: //member/autrijus/Devel-Hints/Hints.xs $ $Author: autrijus $
-   $Revision: #5 $ $Change: 7154 $ $DateTime: 2003/07/27 08:52:51 $ */
-
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
@@ -19,6 +16,10 @@
 #define MYCOP		((count <= 0) ? PL_curcop \
 			    : cxstack[cxstack_ix - count + 1 ].blk_oldcop)
 
+#ifndef CopFILEGV_set
+#define CopFILEGV_set(c, gv) ;; /* noop */
+#endif
+
 MODULE = Devel::Hints	PACKAGE = Devel::Hints
 
 char *
@@ -26,7 +27,11 @@ cop_label(count=0, value=NULL)
 	I32		count
 	char*		value
     CODE:
+#ifdef CopLABEL
+	if (GIMME_V == G_VOID) XSRETURN(0); RETVAL = (char *) CopLABEL(MYCOP);
+#else
 	MEMBER_PV( cop_label );
+#endif
     OUTPUT:
 	RETVAL
 
@@ -80,7 +85,11 @@ cop_arybase(count=0, value=0)
 	I32		count
 	I32		value
     CODE:
+#ifdef CopARYBASE_get
+	if (GIMME_V == G_VOID) XSRETURN(0); RETVAL = (I32) CopARYBASE_get(MYCOP);
+#else
 	MEMBER( cop_arybase );
+#endif
     OUTPUT:
 	RETVAL
 
@@ -98,6 +107,9 @@ cop_warnings(count=0, value=NULL)
 	I32		count
 	SV*		value
     CODE:
+#if PERL_REVISION == 5 && (PERL_VERSION >= 10)
+	RETVAL = &PL_sv_undef;
+#else
 	SET( MYCOP->cop_warnings = newSVsv(value));
 	if ( PTR2UV(MYCOP->cop_warnings) > 255 ) {
 	    /* pointer to the lexical SV */
@@ -107,6 +119,7 @@ cop_warnings(count=0, value=NULL)
 	    /* UV of global warnings flags */
 	    RETVAL = newSVuv( PTR2UV(MYCOP->cop_warnings) );
 	}
+#endif
     OUTPUT:
 	RETVAL
 
@@ -115,7 +128,7 @@ cop_io(count=0, value=NULL)
 	I32		count
 	SV*		value
     CODE:
-#if PERL_REVISION == 5 && PERL_VERSION >= 7
+#if PERL_REVISION == 5 && (PERL_VERSION >= 7 && PERL_VERSION < 10)
 	MEMBER_SV( cop_io );
 #else
 	RETVAL = &PL_sv_undef;

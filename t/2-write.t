@@ -12,6 +12,7 @@ foreach (qw(label file filegv stashpv stash seq arybase line warnings io)) {
 }
 
 sub label {
+    if ($] >= 5.010) { SKIP: { skip('cop_label not assignable in Perl 5.10+', 2); } return; }
     my $x;
 ENTER:
     is(cop_label(0 => $Topic), $Topic, $TopicRV) unless $x;
@@ -26,6 +27,7 @@ sub file {
 }
 
 sub filegv {
+    if ($] >= 5.010) { SKIP: { skip('cop_filegv not assignable in Perl 5.10+', 1); } return; }
     my $x = cop_filegv(0, \*DATA);
     is($x, \*DATA, $TopicRV);
 }
@@ -47,6 +49,7 @@ sub seq {
 }
 
 sub arybase {
+    if ($] >= 5.010) { SKIP: { skip('cop_arybase not assignable in Perl 5.10+', 2); } return; }
     my @a = (1 .. 10);
     is(cop_arybase(0 => 1), 1, $TopicRV), is($a[1], 1, $Topic);
 }
@@ -57,7 +60,9 @@ sub line {
 }
 
 sub warnings {
+    if ($] >= 5.010) { SKIP: { skip('cop_warnings not assignable in Perl 5.10+', 2); } return; }
     my $x;
+    no warnings 'closure';
     no warnings 'redefine';
     BEGIN { $x = ${^WARNING_BITS} };
     is(cop_warnings(0 => ~$x), ~$x, $TopicRV), sub {

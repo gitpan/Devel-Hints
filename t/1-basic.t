@@ -23,20 +23,25 @@ is(cop_filegv(), \$::{'_<' . __FILE__}, 'cop_filegv');
 
 ok(cop_seq(), 'cop_seq');
 
+no warnings 'deprecated';
 $[ = 10;
 is(cop_arybase(), 10, 'cop_arybase');
 
 is(cop_line(), __LINE__, 'cop_line');
 
-use warnings;
-is(cop_warnings(0), 12, 'cop_warnings');
+SKIP: {
+    skip('cop_awarnings() not available', 3) unless defined cop_warnings();
 
-{
-    no warnings 'once';
-    my $x;
-    BEGIN { $x = ${^WARNING_BITS} };
-    is(cop_warnings(0), $x, 'cop_warnings - lexical');
-    is(cop_warnings(1), 12, 'cop_warnings(1)');
+    use warnings;
+    is(cop_warnings(0), 12, 'cop_warnings');
+
+    {
+        no warnings 'once';
+        my $x;
+        BEGIN { $x = ${^WARNING_BITS} };
+        is(cop_warnings(0), $x, 'cop_warnings - lexical');
+        is(cop_warnings(1), 12, 'cop_warnings(1)');
+    }
 }
 
 

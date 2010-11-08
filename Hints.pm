@@ -1,5 +1,5 @@
 package Devel::Hints;
-$VERSION = '0.11';
+$VERSION = '0.20';
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
@@ -28,14 +28,16 @@ __PACKAGE__->bootstrap($VERSION);
 
 __END__
 
+=encoding utf8
+
 =head1 NAME
 
 Devel::Hints - Access compile-time hints at runtime
 
 =head1 VERSION
 
-This document describes version 0.11 of Devel::Hints, released
-December 30, 2005.
+This document describes version 0.20 of Devel::Hints, released
+November 8, 2010.
 
 =head1 SYNOPSIS
 
@@ -43,19 +45,24 @@ December 30, 2005.
 
     LABEL:
     print cop_label();	    # 'LABEL'
+    # cop_label is only settable on Perl 5.8 or below
     cop_label(0 => 'FOO');  # "goto FOO;" is valid after this point!
+
     print cop_file();	    # same as __FILE__
     print cop_filegv();	    # same as \$::{'_<' . __FILE__}
     print cop_stashpv();    # same as __PACKAGE__
     print cop_stash();	    # same as \%{__PACKAGE__ . '::'}
     print cop_seq();	    # an integer
-    print cop_arybase();    # same as $[
     print cop_line();	    # same as __LINE__
 
+    # cop_arybase() is only settable on Perl 5.8 or below
+    print cop_arybase();    # same as $[
+
+    # cop_warnings() is only available to Perl 5.8 or below
     use warnings;
     print cop_warnings();   # same as compile-time ${^WARNING_BITS}
 
-    # cop_io() is only available to Perl 5.7 or above
+    # cop_io() is only available to Perl 5.7 and Perl 5.8
     use open IO => ':utf8';
     print cop_io();	    # same as compile-time ${^OPEN}
 
@@ -135,15 +142,15 @@ less elegant XS implementation.
 
 =head1 AUTHORS
 
-Audrey Tang E<lt>autrijus@autrijus.orgE<gt>
+唐鳳 E<lt>cpan@audreyt.orgE<gt>
 
-=head1 COPYRIGHT
+=head1 CC0 1.0 Universal
 
-Copyright 2003, 2005 by Audrey Tang E<lt>autrijus@autrijus.orgE<gt>.
+To the extent possible under law, 唐鳳 has waived all copyright and related
+or neighboring rights to Convert-EastAsianWidth.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This work is published from Taiwan.
 
-See L<http://www.perl.com/perl/misc/Artistic.html>
+L<http://creativecommons.org/publicdomain/zero/1.0>
 
 =cut
