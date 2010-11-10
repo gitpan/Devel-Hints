@@ -1,5 +1,5 @@
 package Devel::Hints;
-$VERSION = '0.20';
+$VERSION = '0.21';
 
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
@@ -36,8 +36,8 @@ Devel::Hints - Access compile-time hints at runtime
 
 =head1 VERSION
 
-This document describes version 0.20 of Devel::Hints, released
-November 8, 2010.
+This document describes version 0.21 of Devel::Hints, released
+November 10, 2010.
 
 =head1 SYNOPSIS
 
@@ -53,10 +53,8 @@ November 8, 2010.
     print cop_stashpv();    # same as __PACKAGE__
     print cop_stash();	    # same as \%{__PACKAGE__ . '::'}
     print cop_seq();	    # an integer
-    print cop_line();	    # same as __LINE__
-
-    # cop_arybase() is only settable on Perl 5.8 or below
     print cop_arybase();    # same as $[
+    print cop_line();	    # same as __LINE__
 
     # cop_warnings() is only available to Perl 5.8 or below
     use warnings;
@@ -84,6 +82,13 @@ it should walk upward to obtain the C<cop> members.
 Functions can also take another optional argument, which (if specified)
 I<becomes the new value> for the hint, affecting the current statement
 or block's behaviour.
+
+On perl 5.10 or greater, the first argument to these functions can also be a
+coderef. In that case, they return the value for the first statement in the
+coderef's body, and if an argument is passed, they set the value for the entire
+coderef body. C<cop_line> and C<cop_file> are slightly special here - #line
+directives within the coderef will still be respected, and the line will be
+offset by the correct amount within the sub.
 
 =head1 FUNCTIONS
 
@@ -147,7 +152,7 @@ less elegant XS implementation.
 =head1 CC0 1.0 Universal
 
 To the extent possible under law, 唐鳳 has waived all copyright and related
-or neighboring rights to Convert-EastAsianWidth.
+or neighboring rights to Devel-Hints.
 
 This work is published from Taiwan.
 

@@ -30,17 +30,17 @@ is(cop_arybase(), 10, 'cop_arybase');
 is(cop_line(), __LINE__, 'cop_line');
 
 SKIP: {
-    skip('cop_awarnings() not available', 3) unless defined cop_warnings();
+    skip('cop_warnings() not available', 3) unless defined cop_warnings();
 
     use warnings;
-    is(cop_warnings(0), 12, 'cop_warnings');
+    is(cop_warnings(0), 16, 'cop_warnings');
 
     {
         no warnings 'once';
         my $x;
         BEGIN { $x = ${^WARNING_BITS} };
         is(cop_warnings(0), $x, 'cop_warnings - lexical');
-        is(cop_warnings(1), 12, 'cop_warnings(1)');
+        is(cop_warnings(1), 16, 'cop_warnings(1)');
     }
 }
 
